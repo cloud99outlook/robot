@@ -1,0 +1,156 @@
+*** Settings ***
+Library   SeleniumLibrary
+Library    SeleniumLibrary
+
+*** Variables ***
+${browser} chrome
+${url1}    https://google.com
+${url2}    https://practice.selenium.com
+${url3}    https://demowebshop.trecentis.com
+${url4}	   https://testautomationpractisce.blogspot.com
+${url5}    https://seleniumhq.github.io/selenium/docs/api/java/index
+${url6}    https://opensource-demo.orangehrmlive.com/web/index.php/auth/login
+${url7}     http://swisnl.github.io/jQuery-contextMenu/demo.html    chrome
+
+
+*** Test Cases ***
+LoginTest
+     #create webdriver    chrome     executable_path="D:\python\drivers\chromedriver.exe";
+    open browser    https://google.com  create chrome
+	click link   xpath://a[@class='login-path']
+	input text   id:Email  testemail@gmail.com //data-intendation is important
+	input text   id:password  testpwd
+	click element    xpath://a[@class='login-button']
+	close browser
+
+
+LoginTest_variables
+	open browser    ${browser} ${url1}
+	title should be     nopCommercedemo store
+	click link  xpath://a[@class='ico-login']
+	${"email_txt"}  set variable    id=Email
+	#element hould not be visible ${"email_txt"}
+	input text   id:Email  testemail@gmail.com //data-intendation is important
+	input text  id:password  testpwd
+	click element   xpath://a[@class='login-button']
+
+LoginTest_Bysettingkeyword
+	open browser    ${browser} ${url2}
+	maximize browser window
+	LogintoApplication
+	close browser
+
+Testcase_Radio_Checkbox
+	open browser     ${browser} ${url2}
+	#name of radio the is gender;value is male
+	select radio button  gender male
+	select radio button    exp    gender male
+	close browser
+	#Checkbox
+	select checkbox     BlackTea
+	select checkbox     RedTea
+	unselect checkbox   BlackTea
+	close browser
+
+TestcaseDropdown
+	open browser     ${browser} ${url2}
+	select from list by label   continents USA #label is the name
+	sleep   3
+	select from list by value   value3
+	select from list by index   5
+	# start from 0 to n
+
+	#select multiple from dropdown
+	select from list by label   selenium_commands SwitchCommands
+	select from list by label   selenium_commands WebElementCommands
+	sleep    3
+	unselect from list by label     selenium_commands WebElementCommands
+	close browser
+
+TestcaseRegression
+	${speed1} =     get selenium speed
+	${timeout} =    set selenium timeout
+
+	set selenium implicit wait   2 seconds
+
+	log to console   ${speed1}
+	log to console   ${timeout}
+	open browser     ${browser} ${url3}
+	maximize browser window
+	set selenium speed  2 seconds
+	#set selenium timeout 10 seconds
+	#Register and M are text in the webpage--default wait tie in robot framwork is 5 sec
+	wait until page contains    Register
+	wait until page contains    M
+	select radio button     gender M
+	#check if selenium is maintaining speed of 3 seconds
+	${speed} =  get selenium speed
+	log to console   ${speed1}
+
+
+
+Testcaseclosebrowsers
+	open browser    ${browser} ${url1}
+	maximize browser window
+	open browser  ${browser} ${url1}
+	maximize browser window
+	close browser
+	close all browsers
+
+
+TestcaseAlerthandling
+	open browser    ${url4}}
+	click element   xpath:https://*[@id='HTML9']/div[1]/button
+	sleep    3
+	handle alert    accept
+	handle alert    dismiss
+	handle alert    leave
+	#verify an alert is present
+	alert should be present 	Press a button!
+	close browser
+
+TestingFrame
+	open browser    ${url5}
+
+Testingnavigation
+    open browser    ${url1}
+    ${getloc}=  get location
+    log to console    ${getloc}
+    ${getloc}=  go to  ${url5}
+    log to console    ${getloc}
+    go back
+    log to console    ${getloc}
+
+TestingScreenshotofElement
+	open browser    ${url6}
+	input text   id:txtUsername     Admin
+	input text    id:txtpassword    admin123
+	capture element screenshot    xpath://*[@id='divLogo']/img      C:/Users/meera/PycharmProjects/pythonProject/testcases/screenshots.logo.png
+    capture page screenshot     C:/Users/meera/PycharmProjects/fullpagescreenshot.png
+
+    #if we specify the project without folder location, then its goes to default project loaction itself
+    capture element screenshot    xpath://*[@id='divLogo']/img
+    capture page screenshot         pagescreenshot.png
+
+TestingmouseClicks
+    maximize browser window
+    #to right click--Open context menu
+    open context menu    xpath://span[@class='context-menu-one btn btn-neutral']
+    sleep  3
+    go back
+    double click element    xpath://span[@class='context-menu-one btn btn-neutral']
+
+
+*** Keywords ***
+LogintoApplication
+    click link   xpath://a[@class='login-path']
+	input text  id:Email  testemail@gmail.com //data-intendation is important
+	input text  id:password  testpwd
+	click element    xpath://a[@class='login-button']
+
+	#drag and drop
+	#drag and drop    id:box6 id:box7
+
+
+
+
